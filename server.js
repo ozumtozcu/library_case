@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -11,7 +10,6 @@ const BorrowBook = require('./models/borrowBook');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 const dbUrl =
   'mongodb+srv://ozum:Asd.1234@book.hpdhx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
@@ -54,7 +52,6 @@ app.get('/users', function(req, res) {
 });
 
 app.get('/users/:id', function(req, res) {
-  console.log(req.params.id);
   User.findById(req.params.id)
     .then(result => {
       if (result == null) {
@@ -80,10 +77,9 @@ app.get('/books', function(req, res) {
 
 app.get('/books/:id', async function(req, res) {
   let score = 0;
-  // console.log(req.params.id);
+
   const borrow = await BorrowBook.find({ book: req.params.id })
     .then(result => {
-      // console.log(result)
       if (result.length != 0) {
         for (let i = 0; i < result.length; i++) {
           score += result[i].score;
@@ -148,7 +144,16 @@ app.post('/users/:userid/borrow/:bookid', async (req, res) => {
   const bookResult = await Book.find({ bookId: req.params.bookid }).catch(err => {
     console.log(err);
   });
-  console.log(bookResult);
+  const borrowResult = await BorrowBook.find({ book: req.params.bookid }).catch(err => {
+    console.log(err);
+  });
+
+  for (let i = 0; i < borrowResult.length; i++) {
+    console.log(borrowResult[i].score);
+    if (borrowResult[i].score == undefined) {
+      res.status(404).json({ message: 'Book is already borrowed.' });
+    }
+  }
   if (userResult == null) {
     res.status(404).json({ message: 'User not found.' });
   }
@@ -194,7 +199,8 @@ app.post('/users/:userid/return/:bookid', async (req, res) => {
   await BorrowBook.updateOne(
     {
       book: req.params.bookid,
-      user: req.params.userid
+      user: req.params.userid,
+      score: undefined
     },
     {
       score: req.body.score
