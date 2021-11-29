@@ -1,0 +1,22 @@
+version: "2"
+services:
+  test1:
+    build: .
+    command: node server.js
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    restart: always            
+  mongo:
+    image: mongo:4.2.8
+    ports:
+     - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ozum
+      MONGO_INITDB_ROOT_PASSWORD: Asd.1234
+      MONGO_INITDB_DATABASE: library   
+    volumes:
+     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro   
+   
+

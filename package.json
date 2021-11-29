@@ -17,7 +17,8 @@
     "multer": "^1.4.2",
     "request": "^2.88.2",
     "supertest": "^6.1.6",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
+    "mongoose": "^6.0.13"
   },
   "devDependencies": {
     "babel-jest": "^27.3.1",

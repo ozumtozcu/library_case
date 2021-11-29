@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbUrl =
-  'mongodb+srv://ozum:Asd.1234@book.hpdhx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+  'mongodb://ozum:Asd.1234@mongo:27017/library?retryWrites=true&w=majority';
 mongoose
   .connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => console.log('connected'))
